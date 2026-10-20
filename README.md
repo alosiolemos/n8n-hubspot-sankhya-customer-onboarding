@@ -31,7 +31,6 @@ Parceiro, contatos e contrato dependem de vínculos, especialmente **CODPARC**. 
 
 ![Cadastro de parceiro, contatos e contrato no Sankhya](assets/screenshots/cadastro-hubspot-sankhya.png)
 
-Envie **cadastro-hubspot-sankhya.png** para **assets/screenshots/**. O README já aponta para esse nome.
 
 ## Explore
 
