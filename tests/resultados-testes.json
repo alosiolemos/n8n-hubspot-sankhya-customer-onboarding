@@ -1,0 +1,34 @@
+{
+  "escopo": "Testes locais de JavaScript e estrutura JSON, sem n8n ou sistemas reais",
+  "total": 7,
+  "testes": [
+    {
+      "teste": "Sintaxe dos corpos JavaScript",
+      "resultado": "passou"
+    },
+    {
+      "teste": "Estrutura pública e conexões válidas",
+      "resultado": "passou"
+    },
+    {
+      "teste": "Limpa CNPJ, CEP e inscrições e reconhece isenção",
+      "resultado": "passou"
+    },
+    {
+      "teste": "Campos ausentes não são convertidos em documentos inventados",
+      "resultado": "passou"
+    },
+    {
+      "teste": "Separa contatos financeiros e legais sem incluir outros campos",
+      "resultado": "passou"
+    },
+    {
+      "teste": "Ausência de chaves de contato produz lista vazia",
+      "resultado": "passou"
+    },
+    {
+      "teste": "Chave existente com valor vazio ainda cria grupo no código original",
+      "resultado": "passou"
+    }
+  ]
+}

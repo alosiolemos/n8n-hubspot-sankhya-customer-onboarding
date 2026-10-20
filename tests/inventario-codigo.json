@@ -1,0 +1,20 @@
+{
+  "repo": "n8n-hubspot-sankhya-customer-onboarding",
+  "title": "Cadastro integrado — HubSpot → ERP Sankhya",
+  "image": "cadastro-hubspot-sankhya.png",
+  "variant": "cadastro",
+  "total": 16,
+  "disabled": 7,
+  "codes": [
+    {
+      "name": "Contatos",
+      "path": "code/01-contatos.js",
+      "legacy": false
+    },
+    {
+      "name": "Limpa cep/insc/cnpj",
+      "path": "code/02-limpa-cep-insc-cnpj.js",
+      "legacy": false
+    }
+  ]
+}

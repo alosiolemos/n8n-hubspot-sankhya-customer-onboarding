@@ -1,0 +1,684 @@
+{
+  "name": "Cadastro integrado — HubSpot → ERP Sankhya — template público",
+  "nodes": [
+    {
+      "parameters": {
+        "httpMethod": "POST",
+        "path": "demo-hubspot-sankhya-onboarding",
+        "options": {}
+      },
+      "id": "a72eeb04-4ba1-4e18-b702-1471fc713407",
+      "name": "Webhook",
+      "type": "n8n-nodes-base.webhook",
+      "typeVersion": 1,
+      "position": [
+        -496,
+        288
+      ],
+      "disabled": true
+    },
+    {
+      "parameters": {
+        "method": "POST",
+        "url": "https://api.sankhya.com.br/login",
+        "sendHeaders": true,
+        "headerParameters": {
+          "parameters": [
+            {
+              "name": "token",
+              "value": "CONFIGURE_SECRET_PRIVATELY"
+            },
+            {
+              "name": "appkey",
+              "value": "CONFIGURE_SECRET_PRIVATELY"
+            },
+            {
+              "name": "username",
+              "value": "CONFIGURE_SECRET_PRIVATELY"
+            },
+            {
+              "name": "password",
+              "value": "CONFIGURE_SECRET_PRIVATELY"
+            }
+          ]
+        },
+        "options": {}
+      },
+      "id": "2358b936-8ddd-4bec-9a76-44018d1084af",
+      "name": "Gera Key",
+      "type": "n8n-nodes-base.httpRequest",
+      "typeVersion": 4.1,
+      "position": [
+        -80,
+        288
+      ],
+      "disabled": true
+    },
+    {
+      "parameters": {
+        "keepOnlySet": true,
+        "values": {
+          "string": [
+            {
+              "name": "Bearertoken",
+              "value": "=Bearer {{ $json.bearerToken }}"
+            },
+            {
+              "name": "=CEP",
+              "value": "={{ $('Limpa cep/insc/cnpj').item.json.CEP }}"
+            },
+            {
+              "name": "=Bairro",
+              "value": "={{ $('Webhook').item.json.body.Bairro }}"
+            },
+            {
+              "name": "Cidade",
+              "value": "={{ $('Webhook').item.json.body.Cidade }}"
+            },
+            {
+              "name": "Estado",
+              "value": "={{ $('Webhook').item.json.body.Estado }}"
+            },
+            {
+              "name": "Número",
+              "value": "={{ $('Webhook').item.json.body.Numero }}"
+            },
+            {
+              "name": "Logradouro",
+              "value": "={{ $('Webhook').item.json.body.Logradouro }}"
+            },
+            {
+              "name": "CNPJ",
+              "value": "={{ $('Limpa cep/insc/cnpj').item.json.CGC_CPF }}"
+            },
+            {
+              "name": "Razão Social",
+              "value": "={{ $('Webhook').item.json.body.RAZAOSOCIAL }}"
+            },
+            {
+              "name": "=Inscrição Municipal",
+              "value": "={{ $('Limpa cep/insc/cnpj').item.json.INSCMUNl }}"
+            },
+            {
+              "name": "Inscrição Estadual",
+              "value": "={{ $('Limpa cep/insc/cnpj').item.json.IDENTINSCESTAD }}"
+            },
+            {
+              "name": "Nome Responsável Legal ",
+              "value": "={{ $('Webhook').item.json.body.Nome_do_responsavel_legal }}"
+            },
+            {
+              "name": "E-mail Responsável Legal ",
+              "value": "={{ $('Webhook').item.json.body.E_mail_do_responsavel_legal.match(/[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\\.[a-zA-Z]{2,}/)?.[0] || '' }}\n"
+            },
+            {
+              "name": "Nome Responsável financeiro",
+              "value": "={{ $('Webhook').item.json.body.Nome_do_responsavel_financeiro }}"
+            },
+            {
+              "name": "E-mail Responsável financeiro",
+              "value": "={{ $('Webhook').item.json.body.E_mail_do_responsavel_financeiro.match(/[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\\.[a-zA-Z]{2,}/)?.[0] || '' }}"
+            },
+            {
+              "name": "CODCID",
+              "value": "5534"
+            },
+            {
+              "name": "CODCTABCOINT",
+              "value": "4"
+            },
+            {
+              "name": "CLASSIFICMS",
+              "value": "C"
+            },
+            {
+              "name": "OBSERVACOES",
+              "value": "=Endereço: {{ $('Webhook').item.json.body.Logradouro }},{{ $('Webhook').item.json.body.Numero }} {{ $('Webhook').item.json.body.Bairro }}-{{ $('Webhook').item.json.body.Cidade }}/{{ $('Webhook').item.json.body.Estado }}CEP:{{ $('Webhook').item.json.body.CEP }} Financeiro:{{ $('Webhook').item.json.body.Nome_do_responsavel_financeiro }} Financeiro_Email:{{ $('Webhook').item.json.body.E_mail_do_responsavel_financeiro }} Legal:{{ $('Webhook').item.json.body.Nome_do_responsavel_legal }} Legal_Email:{{ $('Webhook').item.json.body.E_mail_do_responsavel_legal }}"
+            },
+            {
+              "name": "OBSERVAÇÕES DO CONTRATO",
+              "value": "=Endereço: {{ $('Webhook').item.json.body.Logradouro }},{{ $('Webhook').item.json.body.Numero }} {{ $('Webhook').item.json.body.Bairro }}-{{ $('Webhook').item.json.body.Cidade }}/{{ $('Webhook').item.json.body.Estado }}CEP:{{ $('Webhook').item.json.body.CEP }} Financeiro:{{ $('Webhook').item.json.body.Nome_do_responsavel_financeiro }} Financeiro_Email:{{ $('Webhook').item.json.body.E_mail_do_responsavel_financeiro }} Legal:{{ $('Webhook').item.json.body.Nome_do_responsavel_legal }} Legal_Email:{{ $('Webhook').item.json.body.E_mail_do_responsavel_legal }} Data limite de recebimento da Nota:{{ new Date(new Date($('Webhook').item.json.body.Data_Limit_recebimento_Nota).getTime() + new Date($('Webhook').item.json.body.Data_Limit_recebimento_Nota).getTimezoneOffset() * 60000).toLocaleDateString('pt-BR') }} Dia de vencimento: {{ $('Webhook').item.json.body.Dia_vencimento_fatura }} Forma de Pagamento: {{ $('Webhook').item.json.body.Forma_de_Pagamento }} Ordem_compra_pedido: {{ $('Webhook').item.json.body.Ordem_compra_pedido }} Empresa_retem_ISS: {{ $('Webhook').item.json.body.Empresa_retem_ISS }} Politica_Pagamento: {{ $('Webhook').item.json.body.Politica_Pagamento }} Link_do_portal_pagamento: {{ $('Webhook').item.json.body.Link_do_portal_pagamento }} Observacoes_gerais: {{ $('Webhook').item.json.body.observacoes_gerais }}"
+            },
+            {
+              "name": "=Empresa_retem_ISS",
+              "value": "= {{ $('Webhook').item.json.body.Empresa_retem_ISS }}"
+            },
+            {
+              "name": "=Politica_Pagamento ",
+              "value": "={{ $('Webhook').item.json.body.Politica_Pagamento }}"
+            },
+            {
+              "name": "Observacoes_gerais",
+              "value": "={{ $('Webhook').item.json.body.observacoes_gerais }}"
+            },
+            {
+              "name": "=Ordem_compra_pedido ",
+              "value": "={{ $('Webhook').item.json.body.Ordem_compra_pedido }}"
+            },
+            {
+              "name": "Link_do_portal_pagamento",
+              "value": "={{ $('Webhook').item.json.body.Link_do_portal_pagamento }}"
+            },
+            {
+              "name": "Site",
+              "value": "={{ $('Webhook').item.json.body.site }}"
+            },
+            {
+              "name": "Forma de Pagamento",
+              "value": "={{ $('Webhook').item.json.body.Forma_de_Pagamento }}"
+            },
+            {
+              "name": "Dia de vencimento",
+              "value": "={{ $('Webhook').item.json.body.Dia_vencimento_fatura }}"
+            },
+            {
+              "name": "Data limite de recebimento da Nota",
+              "value": "={{ new Date(new Date($('Webhook').item.json.body.Data_Limit_recebimento_Nota).getTime() + new Date($('Webhook').item.json.body.Data_Limit_recebimento_Nota).getTimezoneOffset() * 60000).toLocaleDateString('pt-BR') }}"
+            },
+            {
+              "name": "RecordID",
+              "value": "={{ $('Webhook').item.json.body.RecordID }}"
+            },
+            {
+              "name": "Data de Assinatura do Contrato",
+              "value": "={{ new Date(new Date($('Webhook').item.json.body.Data_Assinatura).getTime() + new Date($('Webhook').item.json.body.Data_Assinatura).getTimezoneOffset() * 60000).toLocaleDateString('pt-BR') }}"
+            },
+            {
+              "name": "id_do_negocio_de_sales",
+              "value": "={{ $('Webhook').item.json.body.id_do_negocio_de_sales }}"
+            },
+            {
+              "name": "EMAILNFE",
+              "value": "={{ $('Webhook').item.json.body.E_mail_do_responsavel_legal.match(/[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\\.[a-zA-Z]{2,}/)?.[0] || '' }};{{ $('Webhook').item.json.body.E_mail_do_responsavel_financeiro.match(/[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\\.[a-zA-Z]{2,}/)?.[0] || '' }}"
+            }
+          ]
+        },
+        "options": {}
+      },
+      "id": "2875a1c2-4f98-4503-8abc-7f7aa7b9436f",
+      "name": "Informações",
+      "type": "n8n-nodes-base.set",
+      "typeVersion": 2,
+      "position": [
+        80,
+        288
+      ]
+    },
+    {
+      "parameters": {
+        "content": "## Cadastro integrado — HubSpot → ERP Sankhya\nBloco 1. Template público inativo, sem credenciais. Configure somente em ambiente de teste.",
+        "height": 294,
+        "width": 298.910007
+      },
+      "id": "2b0cab2a-12dc-4c45-8f2e-507b485ba26f",
+      "name": "Sticky Note",
+      "type": "n8n-nodes-base.stickyNote",
+      "typeVersion": 1,
+      "position": [
+        -624,
+        144
+      ]
+    },
+    {
+      "parameters": {
+        "method": "POST",
+        "url": "https://api.sankhya.com.br/gateway/v1/mge/service.sbr?serviceName=DatasetSP.save&outputType=json",
+        "sendHeaders": true,
+        "headerParameters": {
+          "parameters": [
+            {
+              "name": "Content-Type",
+              "value": "application/json"
+            },
+            {
+              "name": "Authorization",
+              "value": "={{ $json.Bearertoken }}"
+            }
+          ]
+        },
+        "sendBody": true,
+        "specifyBody": "json",
+        "jsonBody": "={\n   \"serviceName\":\"DatasetSP.save\",\n   \"requestBody\":{\n      \"entityName\":\"Parceiro\",\n      \"standAlone\":false,\n      \"fields\":[\n         \"CODPARC\",         \n         \"CODCID\",\n         \"NOMEPARC\",\n         \"RAZAOSOCIAL\",         \n         \"CGC_CPF\",\n         \"CODCTABCOINT\",\n         \"CLASSIFICMS\",\n         \"IDENTINSCESTAD\",\n         \"ATIVO\",\n         \"TIPPESSOA\",\n         \"EMAILNFE\",\n         \"OBSERVACOES\",\n         \"CEP\"\n      ],\n      \"records\":[\n         {\n            \"values\":{\n                \"1\":\"{{ $json.CODCID }}\",\n                \"2\":\"{{ $json[\"Razão Social\"] }}\",\n                \"3\":\"{{ $json[\"Razão Social\"] }}\",\n                \"4\":\"{{ $json.CNPJ }}\",\n                \"5\":\"{{ $json.CODCTABCOINT }}\",\n                \"6\":\"{{ $json.CLASSIFICMS }}\",\n                \"7\":\"{{ $json[\"Inscrição Estadual\"] }}\",\n                \"8\":\"S\",\n                \"9\":\"J\",\n                \"10\":\"{{ $json[\"EMAILNFE\"] }}\",\n                \"11\":\"{{ $json.OBSERVACOES }}\",\n                \"12\":\"{{ $json.CEP }}\"\n            }\n         }\n      ]\n   }\n}",
+        "options": {}
+      },
+      "id": "36513a74-0b99-4c75-aa01-fc55582f8d79",
+      "name": "Criar Parceiro",
+      "type": "n8n-nodes-base.httpRequest",
+      "typeVersion": 4.1,
+      "position": [
+        240,
+        288
+      ],
+      "disabled": true
+    },
+    {
+      "parameters": {
+        "keepOnlySet": true,
+        "values": {
+          "string": [
+            {
+              "name": "CODPARC",
+              "value": "={{ $json.responseBody.result[0][0] }}"
+            }
+          ]
+        },
+        "options": {}
+      },
+      "id": "f0b5766d-e9de-4b9c-9a2f-cb39e7fe61eb",
+      "name": "CODPARC",
+      "type": "n8n-nodes-base.set",
+      "typeVersion": 2,
+      "position": [
+        400,
+        288
+      ]
+    },
+    {
+      "parameters": {
+        "batchSize": 1,
+        "options": {
+          "reset": false
+        }
+      },
+      "id": "39c9f580-9e51-47ff-95ae-397db8fba830",
+      "name": "Split In Batches",
+      "type": "n8n-nodes-base.splitInBatches",
+      "typeVersion": 2,
+      "position": [
+        752,
+        288
+      ]
+    },
+    {
+      "parameters": {
+        "jsCode": "// Obter o Body do input dinamicamente da rota correta\nconst body = $('Informações').item.json;\n\n// Função para criar os registros dinamicamente para os tipos desejados\nconst criarRegistro = (tipo) => {\n  const registro = {};\n\n  // Iterar sobre todas as chaves do objeto body\n  Object.keys(body).forEach((key) => {\n    // Verificar se a chave contém o tipo desejado\n    if (key.toUpperCase().includes(tipo.toUpperCase())) {\n      registro[key] = body[key];\n    }\n  });\n\n  // Adicionar o tipo do contato ao registro\n  if (Object.keys(registro).length > 0) {\n    registro[\"tipo do contato\"] = tipo === \"FINANCEIRO\" ? \"Financeiro\" : \"Legal\";\n  }\n\n  return registro;\n};\n\n// Gerar os registros apenas para \"LEGAL\" e \"FINANCEIRO\"\nconst tipos = [\"FINANCEIRO\", \"LEGAL\"];\nconst registros = tipos\n  .map(tipo => criarRegistro(tipo)) // Gera o registro para cada tipo\n  .filter(registro => Object.keys(registro).length > 0) // Filtra registros vazios\n  .map(registro => ({ json: registro })); // Formata como saída do n8n\n\n// Diagnóstico: Log do resultado final\n\n// Retornar os registros como saídas\nreturn registros;\n"
+      },
+      "id": "e00db577-9916-4d54-851d-7c257e7dff67",
+      "name": "Contatos",
+      "type": "n8n-nodes-base.code",
+      "typeVersion": 1,
+      "position": [
+        560,
+        288
+      ]
+    },
+    {
+      "parameters": {
+        "method": "POST",
+        "url": "https://api.sankhya.com.br/gateway/v1/mge/service.sbr?serviceName=CRUDServiceProvider.saveRecord&outputType=json",
+        "sendHeaders": true,
+        "headerParameters": {
+          "parameters": [
+            {
+              "name": "Content-Type",
+              "value": "application/json"
+            },
+            {
+              "name": "Authorization",
+              "value": "={{ $('Informações').item.json.Bearertoken }}"
+            }
+          ]
+        },
+        "sendBody": true,
+        "specifyBody": "json",
+        "jsonBody": "={  \"serviceName\":\"CRUDServiceProvider.saveRecord\",\n   \"requestBody\":{\n      \"dataSet\":{\n         \"rootEntity\":\"Contato\",\n         \"includePresentationFields\":\"S\",\n         \"dataRow\":{\n            \"localFields\":{\n               \"CODPARC\":{\n                  \"$\":\"{{ $json.CODPARC }}\"\n               },               \n               \"NOMECONTATO\":{\n                  \"$\":\"{{ $json.Nome }}\"\n               },               \n               \"EMAIL\":{\n                  \"$\":\"{{ $json['E-mail'] }}\"\n               }\n            }\n         }, \"entity\":{\n            \"fieldset\":{\n               \"list\":\"CODPARC,CODCONTATO,NOMECONTATO,EMAIL\"\n            }\n         }\n      }\n   }\n} ",
+        "options": {}
+      },
+      "id": "d11a9251-6efb-4f09-9489-801ec2a89203",
+      "name": "Criar contatos e associar",
+      "type": "n8n-nodes-base.httpRequest",
+      "typeVersion": 4.1,
+      "position": [
+        1168,
+        272
+      ],
+      "disabled": true
+    },
+    {
+      "parameters": {},
+      "id": "e703ac80-27d9-4b0f-877e-ce68aa755639",
+      "name": "No Operation, do nothing",
+      "type": "n8n-nodes-base.noOp",
+      "typeVersion": 1,
+      "position": [
+        784,
+        688
+      ]
+    },
+    {
+      "parameters": {
+        "conditions": {
+          "string": [
+            {
+              "value1": "={{ $('Contatos').item.json[\"tipo do contato\"] }}",
+              "operation": "contains",
+              "value2": "Financeiro"
+            }
+          ]
+        },
+        "combineOperation": "any"
+      },
+      "id": "d9b8d806-1789-41a6-9da1-9aefa9596e3e",
+      "name": "IF",
+      "type": "n8n-nodes-base.if",
+      "typeVersion": 1,
+      "position": [
+        560,
+        528
+      ]
+    },
+    {
+      "parameters": {
+        "method": "POST",
+        "url": "https://api.sankhya.com.br/gateway/v1/mge/service.sbr?serviceName=DatasetSP.save&outputType=json",
+        "sendHeaders": true,
+        "headerParameters": {
+          "parameters": [
+            {
+              "name": "Content-Type",
+              "value": "application/json"
+            },
+            {
+              "name": "Authorization",
+              "value": "={{ $('Informações').item.json.Bearertoken }}"
+            }
+          ]
+        },
+        "sendBody": true,
+        "specifyBody": "json",
+        "jsonBody": "={\n   \"serviceName\":\"DatasetSP.save\",\n   \"requestBody\":{\n      \"entityName\":\"Contrato\",\n      \"standAlone\":false,\n      \"fields\":[\n         \"NUMCONTRATO\", \n         \"DTCONTRATO\", \n         \"CODPARC\",         \n         \"CODEMP\",\n         \"CODCONTATO\",\n         \"CODCENCUS\",\n         \"CODUSU\",\n         \"DTBASEREAJ\",\n         \"OBSERVACOES\"\n      ],\n      \"records\":[\n         {\n            \"values\":{\n                \"1\":\"{{ $('Informações').item.json[\"Data de Assinatura do Contrato\"] }}\",\n                \"2\":\"{{ $('CODPARC').item.json.CODPARC }}\",\n                \"3\":\"1\",\n                \"4\":\"1\",\n                \"5\":\"910009\",\n                \"6\":\"49\",\n                \"7\":\"{{ $('Informações').item.json[\"Data de Assinatura do Contrato\"] }}\",\n                \"8\":\"{{ $('Informações').item.json[\"OBSERVAÇÕES DO CONTRATO\"] }}\"\n            }\n         }\n      ]\n   }\n}",
+        "options": {}
+      },
+      "id": "f2f44779-6592-4ff6-8d34-a0c07ce6d05f",
+      "name": "Criar contrato",
+      "type": "n8n-nodes-base.httpRequest",
+      "typeVersion": 4.1,
+      "position": [
+        784,
+        512
+      ],
+      "disabled": true
+    },
+    {
+      "parameters": {
+        "keepOnlySet": true,
+        "values": {
+          "string": [
+            {
+              "name": "Nome",
+              "value": "={{ $('Contatos').item.json['Nome Responsável Legal '] || $('Contatos').item.json['Nome Responsável financeiro'] }}"
+            },
+            {
+              "name": "E-mail",
+              "value": "={{ ($('Contatos').item.json['E-mail Responsável Legal '] || $('Contatos').item.json['E-mail Responsável financeiro']).trim() }}"
+            },
+            {
+              "name": "CODPARC",
+              "value": "={{ $('CODPARC').item.json.CODPARC }}"
+            }
+          ],
+          "number": [
+            {
+              "name": "Tipo",
+              "value": "={{ $json[\"tipo do contato\"] }}"
+            }
+          ]
+        },
+        "options": {}
+      },
+      "id": "768d886a-6979-414a-93d9-5388e5bfdcd4",
+      "name": "Dados dos contatos e contratos",
+      "type": "n8n-nodes-base.set",
+      "typeVersion": 2,
+      "position": [
+        960,
+        272
+      ]
+    },
+    {
+      "parameters": {
+        "jsCode": "return {\n  CEP: $json.body.CEP ? String($json.body.CEP).replace(/[./-]/g, '') : $json.body.CEP,\n  INSCMUNl: /isento|insenta/i.test($json.body.INSCMUNl) ? \"ISENTO\" : ($json.body.INSCMUNl ? String($json.body.INSCMUNl).replace(/[./-]/g, '') : $json.body.INSCMUNl),\n  IDENTINSCESTAD: /isento|insenta/i.test($json.body.IDENTINSCESTAD) ? \"ISENTO\" : ($json.body.IDENTINSCESTAD ? String($json.body.IDENTINSCESTAD).replace(/[./-]/g, '') : $json.body.IDENTINSCESTAD),\n  CGC_CPF: $json.body.CGC_CPF ? String($json.body.CGC_CPF).replace(/[^0-9]/g, '') : $json.body.CGC_CPF,\n  INSCRICAO_ESTADUAL: /isento|insenta/i.test($json[\"Inscrição Estadual\"]) ? \"ISENTO\" : $json[\"Inscrição Estadual\"],\n};\n\n\n\n"
+      },
+      "id": "16a74b0f-5ae6-4a68-977b-9dde3a930d93",
+      "name": "Limpa cep/insc/cnpj",
+      "type": "n8n-nodes-base.code",
+      "typeVersion": 1,
+      "position": [
+        -256,
+        288
+      ]
+    },
+    {
+      "parameters": {
+        "method": "PATCH",
+        "url": "=https://api.hubapi.com/crm/v3/objects/CONFIGURE_ID_031/{{ $('Informações').item.json.RecordID }}",
+        "sendHeaders": true,
+        "headerParameters": {
+          "parameters": [
+            {
+              "name": "authorization",
+              "value": "CONFIGURE_SECRET_PRIVATELY"
+            },
+            {
+              "name": "content-type",
+              "value": "application/json"
+            }
+          ]
+        },
+        "sendBody": true,
+        "specifyBody": "json",
+        "jsonBody": "={\n  \"properties\": {\n    \"id_do_parceiro_sankhya\": \"{{ $('CODPARC').item.json.CODPARC }}\",\n    \"id_do_contrato_sankhya\":\"{{ $json.responseBody.result[0][0] }}\",\n    \"sankhya_status_parceiro\":\"Sim\"\n  }\n}   ",
+        "options": {}
+      },
+      "id": "5ca28684-b11c-4861-bd91-e414f5f10b8b",
+      "name": "Atualizar Conta Jurídico",
+      "type": "n8n-nodes-base.httpRequest",
+      "typeVersion": 4.1,
+      "position": [
+        992,
+        512
+      ],
+      "disabled": true
+    },
+    {
+      "parameters": {
+        "authentication": "appToken",
+        "resource": "deal",
+        "operation": "update",
+        "dealId": {
+          "__rl": true,
+          "value": "={{ $('Webhook').item.json.body.id_do_negocio_de_sales }}",
+          "mode": "id"
+        },
+        "updateFields": {
+          "customPropertiesUi": {
+            "customPropertiesValues": [
+              {
+                "property": "id_do_parceiro_sankhya",
+                "value": "={{ $('CODPARC').item.json.CODPARC }}"
+              },
+              {
+                "property": "id_do_contrato_sankhya",
+                "value": "={{ $('Criar contrato').item.json.responseBody.result[0][0] }}"
+              }
+            ]
+          }
+        }
+      },
+      "id": "b03d9909-53fd-412b-a726-e4f5eeeb9064",
+      "name": "HubSpot",
+      "type": "n8n-nodes-base.hubspot",
+      "typeVersion": 2,
+      "position": [
+        1168,
+        512
+      ],
+      "disabled": true
+    }
+  ],
+  "connections": {
+    "Webhook": {
+      "main": [
+        [
+          {
+            "node": "Limpa cep/insc/cnpj",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Gera Key": {
+      "main": [
+        [
+          {
+            "node": "Informações",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Criar Parceiro": {
+      "main": [
+        [
+          {
+            "node": "CODPARC",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "CODPARC": {
+      "main": [
+        [
+          {
+            "node": "Contatos",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Contatos": {
+      "main": [
+        [
+          {
+            "node": "Split In Batches",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Split In Batches": {
+      "main": [
+        [
+          {
+            "node": "Dados dos contatos e contratos",
+            "type": "main",
+            "index": 0
+          }
+        ],
+        [
+          {
+            "node": "IF",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Criar contatos e associar": {
+      "main": [
+        [
+          {
+            "node": "Split In Batches",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "IF": {
+      "main": [
+        [
+          {
+            "node": "Criar contrato",
+            "type": "main",
+            "index": 0
+          }
+        ],
+        [
+          {
+            "node": "No Operation, do nothing",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Dados dos contatos e contratos": {
+      "main": [
+        [
+          {
+            "node": "Criar contatos e associar",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Criar contrato": {
+      "main": [
+        [
+          {
+            "node": "Atualizar Conta Jurídico",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Limpa cep/insc/cnpj": {
+      "main": [
+        [
+          {
+            "node": "Gera Key",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Informações": {
+      "main": [
+        [
+          {
+            "node": "Criar Parceiro",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Atualizar Conta Jurídico": {
+      "main": [
+        [
+          {
+            "node": "HubSpot",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    }
+  },
+  "active": false,
+  "pinData": {},
+  "settings": {
+    "executionOrder": "v1"
+  },
+  "tags": []
+}
